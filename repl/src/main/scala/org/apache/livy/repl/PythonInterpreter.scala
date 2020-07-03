@@ -58,11 +58,6 @@ object PythonInterpreter extends Logging {
     val builder = new ProcessBuilder(Seq(pythonExec, createFakeShell().toString).asJava)
     System.out.println("==================================================")
     System.out.println("==================================================")
-    System.out.println("==================================================")
-    System.out.println("==================================================")
-    System.out.println("==================================================")
-    System.out.println("==================================================")
-    System.out.println("==================================================")
     System.out.println("builder: " + pythonExec)
 
     val env = builder.environment()
