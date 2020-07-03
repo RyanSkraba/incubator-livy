@@ -56,6 +56,14 @@ object PythonInterpreter extends Logging {
     gatewayServer.start()
 
     val builder = new ProcessBuilder(Seq(pythonExec, createFakeShell().toString).asJava)
+    System.out.println("==================================================")
+    System.out.println("==================================================")
+    System.out.println("==================================================")
+    System.out.println("==================================================")
+    System.out.println("==================================================")
+    System.out.println("==================================================")
+    System.out.println("==================================================")
+    System.out.println("builder: " + pythonExec)
 
     val env = builder.environment()
 
@@ -66,12 +74,19 @@ object PythonInterpreter extends Logging {
 
     env.put("PYSPARK_PYTHON", pythonExec)
     env.put("PYTHONPATH", pythonPath.mkString(File.pathSeparator))
+
+    // env.put("PYTHONIOENCODING", "utf-8")
+    // env.put("LANG", "en_US.UTF-8")
+
     env.put("PYTHONUNBUFFERED", "YES")
     env.put("PYSPARK_GATEWAY_PORT", "" + gatewayServer.getListeningPort)
     env.put("PYSPARK_GATEWAY_SECRET", secretKey)
     env.put("SPARK_HOME", sys.env.getOrElse("SPARK_HOME", "."))
     env.put("LIVY_SPARK_MAJOR_VERSION", conf.get("spark.livy.spark_major_version", "1"))
     builder.redirectError(Redirect.PIPE)
+
+    System.out.println("env: " + env)
+
     val process = builder.start()
     new PythonInterpreter(process, gatewayServer)
   }
@@ -278,7 +293,8 @@ private class PythonInterpreter(
   }
 
   private def sendRequest(request: Map[String, Any]): Option[JValue] = {
-    stdin.println(write(request))
+    val x: String = write(request)
+    stdin.println(x)
     stdin.flush()
 
     Option(stdout.readLine()).map { case line =>
